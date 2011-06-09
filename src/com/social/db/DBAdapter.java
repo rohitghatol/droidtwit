@@ -115,7 +115,7 @@ public class DBAdapter
 	public Cursor getAllTwits()
 	{
 		return db.query(DATABASE_TABLE, new String[] { KEY_TWITID, KEY_PROFILE_NAME, KEY_PROFILE_IMAGE_URL, KEY_TWIT_MESSAGE }, null, null, null,
-				null, null);
+				null, KEY_TWITID + " DESC");
 	}
 
 

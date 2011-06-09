@@ -54,16 +54,21 @@ public class SocialFeed extends ListActivity {
 
 				@Override
 				protected List<Twit> doInBackground(OAuthTokens... params) {
+					List<Twit> result =null;
 					if (null != socialService) {
 						try {
-							return socialService.getSocialFeed();
+							result =  socialService.getSocialFeed();
+							//Nothing found in database so do a force fetch
+							if(null==result || result.size()==0){
+								result = socialService.getCurrentSocialFeed();
+							}
 						} catch (RemoteException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 
-					return null;
+					return result;
 
 				}
 
@@ -80,9 +85,10 @@ public class SocialFeed extends ListActivity {
 						TwitAdapter adapter = new TwitAdapter(
 								getApplicationContext(), result);
 						setListAdapter(adapter);
-						if (dialog.isShowing()) {
-							dialog.dismiss();
-						}
+						
+					}
+					if (dialog.isShowing()) {
+						dialog.dismiss();
 					}
 				}
 
