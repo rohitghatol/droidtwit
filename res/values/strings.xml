@@ -14,5 +14,5 @@
 	<string name="cancel">Cancel</string>
 	<string name="remove_account">Remove Account</string>
 	
-	<string name="about_us_txt">DroidTwit is an android reference implementation of Twitter. The source code of this project is hosted at <a href="http://code.google.com/p/droidtwit">http://code.google.com/p/droidtwit</a> The lead developers of this project are Saurabh Gangard and Rohit Ghatol. Both of the work for Synerzip and Quickoffice. </string>
+	<string name="about_us_txt">DroidTwit is an android reference implementation of Twitter. The source code of this project is hosted at <a href="http://code.google.com/p/droidtwit">http://code.google.com/p/droidtwit</a> The lead developers of this project are Saurabh Gangarde and Rohit Ghatol. Both of the work for Synerzip and Quickoffice. </string>
 </resources>
