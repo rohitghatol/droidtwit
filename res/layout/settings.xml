@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+    <TextView android:text="Select Refresh Interval" android:id="@+id/textView1" android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+    <RadioButton android:text="10 seconds" android:id="@+id/radioButton1" android:layout_width="fill_parent" android:layout_height="wrap_content"></RadioButton>
+    <RadioButton android:text="30 seconds" android:id="@+id/radioButton2" android:layout_width="fill_parent" android:layout_height="wrap_content"></RadioButton>
+    <RadioButton android:text="1 Minute" android:id="@+id/radioButton3" android:layout_width="fill_parent" android:layout_height="wrap_content"></RadioButton>
+</LinearLayout>

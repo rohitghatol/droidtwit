@@ -17,6 +17,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="SocialFeed" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+		<activity android:name="DroidTwitSettings"></activity>
 		<receiver android:name="AlarmReceiver" android:enabled="true">
 		</receiver>
 		<service android:name="com.social.services.SocialServiceImpl"/>

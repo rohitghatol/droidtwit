@@ -266,15 +266,19 @@ public class SocialFeed extends ListActivity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
+		Intent navIntent = null;
 		switch (item.getItemId()) {
 		case R.id.remove_account:
 			authMgr.saveAuthTokens(null, null);
 			finish();
-			Intent navIntent = new Intent(getApplicationContext(),
+			navIntent = new Intent(getApplicationContext(),
 					SplashScreen.class);
 			startActivity(navIntent);
-
 			return true;
+		case R.id.settings:
+			navIntent = new Intent(getApplicationContext(),
+					DroidTwitSettings.class);
+			startActivity(navIntent);
 		default:
 			return false;
 		}

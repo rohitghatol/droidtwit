@@ -3,4 +3,5 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/removeAccount" android:enabled="true" android:id="@+id/remove_account"></item>
     <!-- <item android:title="@string/refresh" android:enabled="true" android:id="@+id/refresh"></item> -->
+    <item android:title="Settings" android:id="@+id/settings"></item>
 </menu>
