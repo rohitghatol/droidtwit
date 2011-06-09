@@ -30,20 +30,12 @@ public class DrawableManager {
 
 	private Drawable fetchDrawable(String urlString) {
 
-		Log.d(this.getClass().getSimpleName(),
-				"fetchDrawable() -> trying to image url:" + urlString);
+		
 		try {
 			InputStream is = fetch(urlString);
 			Drawable drawable = Drawable.createFromStream(new FlushedInputStream(is), "src");
 			if (null != drawable) {
 				drawableMap.put(urlString, drawable);
-				Log.d(this.getClass().getSimpleName(),
-						"fetchDrawable() -> got a thumbnail drawable:"
-								+ urlString + " " + drawable.getBounds() + ", "
-								+ drawable.getIntrinsicHeight() + ","
-								+ drawable.getIntrinsicWidth() + ", "
-								+ drawable.getMinimumHeight() + ","
-								+ drawable.getMinimumWidth());
 			}
 			return drawable;
 		} catch (MalformedURLException e) {
@@ -60,14 +52,8 @@ public class DrawableManager {
 	public void fetchDrawableOnThread(final String urlString,
 			final ImageView imageView) {
 		if (drawableMap.containsKey(urlString)) {
-			Log.d(this.getClass().getSimpleName(),
-					"fetchDrawableOnThread() -> got cached image for "
-							+ urlString);
 			imageView.setImageDrawable(drawableMap.get(urlString));
 		} else {
-			Log.d(this.getClass().getSimpleName(),
-					"fetchDrawableOnThread() -> did not get cached image for "
-							+ urlString);
 			Thread thread = new Thread() {
 				@Override
 				public void run() {
@@ -80,19 +66,11 @@ public class DrawableManager {
 
 							@Override
 							public void run() {
-								Log.d(this.getClass().getSimpleName(),
-										"fetchDrawableOnThread() -> setting image after downloading for "
-												+ urlString);
 								imageView.setImageDrawable(drawable);
 							}
 						});
 					}
-					else{
-						Log.d(this.getClass().getSimpleName(),
-								"fetchDrawableOnThread() -> Something wrong "
-										+ urlString);
-					}
-
+		
 				}
 			};
 			thread.start();

@@ -1,10 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-    <TextView android:text="Select Refresh Interval" android:id="@+id/textView1" android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
-    <RadioButton android:text="10 seconds" android:id="@+id/radioButton1" android:layout_width="fill_parent" android:layout_height="wrap_content"></RadioButton>
-    <RadioButton android:text="30 seconds" android:id="@+id/radioButton2" android:layout_width="fill_parent" android:layout_height="wrap_content"></RadioButton>
-    <RadioButton android:text="1 Minute" android:id="@+id/radioButton3" android:layout_width="fill_parent" android:layout_height="wrap_content"></RadioButton>
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:padding="10dip" android:background="#101010">
+	<ScrollView android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		<TableLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:stretchColumns="0,1">
+			<TableRow android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:text="@string/remove_account"></TextView>
+
+				<CheckBox android:id="@+id/remove_account_check"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:layout_gravity="right"></CheckBox>
+			</TableRow>
+			<TableRow android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:text="Select Refresh Interval"
+					android:id="@+id/textView1" android:layout_width="fill_parent"
+					android:layout_height="wrap_content"></TextView>
+				<Spinner android:id="@+id/refresh_rates"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:entries="@array/refresh_rates">
+
+				</Spinner>
+			</TableRow>
+			<TableRow android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<Button android:id="@+id/apply_button" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:text="@string/apply"></Button>
+				<Button android:id="@+id/cancel_button" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:text="@string/cancel"></Button>
+			</TableRow>
+
+		</TableLayout>
+	</ScrollView>
+
+</RelativeLayout>
+
+

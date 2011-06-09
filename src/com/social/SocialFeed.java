@@ -2,6 +2,7 @@ package com.social;
 
 import java.util.List;
 
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -18,6 +19,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
@@ -26,6 +30,7 @@ import com.social.model.OAuthTokens;
 import com.social.model.Twit;
 import com.social.services.ISocialService;
 import com.social.services.SocialServiceImpl;
+import com.social.services.managers.FeedManager;
 import com.social.services.managers.OAuthAuthenticatonMgr;
 
 public class SocialFeed extends ListActivity {
@@ -268,19 +273,124 @@ public class SocialFeed extends ListActivity {
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		Intent navIntent = null;
 		switch (item.getItemId()) {
-		case R.id.remove_account:
-			authMgr.saveAuthTokens(null, null);
-			finish();
-			navIntent = new Intent(getApplicationContext(),
-					SplashScreen.class);
-			startActivity(navIntent);
-			return true;
+
 		case R.id.settings:
-			navIntent = new Intent(getApplicationContext(),
-					DroidTwitSettings.class);
-			startActivity(navIntent);
+			handleSettings();
+//			navIntent = new Intent(getApplicationContext(),
+//					DroidTwitSettings.class);
+//			startActivity(navIntent);
+
+			return true;
+		case R.id.tweet_live:
+			handleTweet();
+			return true;
+		case R.id.about_us:
+			handleAboutUs();
 		default:
 			return false;
 		}
+	}
+
+	private void handleAboutUs(){
+		Intent navIntent = new Intent(getApplicationContext(),AboutUs.class);
+		startActivity(navIntent);
+	}
+	private void handleTweet() {
+		final Dialog dialog = new Dialog(this);
+		dialog.setTitle(R.string.tweet);
+		dialog.setContentView(R.layout.tweet);
+
+		Button tweetButton = (Button) dialog.findViewById(R.id.tweet);
+		Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+		final EditText tweetText = (EditText) dialog
+				.findViewById(R.id.tweet_text);
+
+		tweetButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				AsyncTask<String, Void, Void> asyncTask = new AsyncTask<String, Void, Void>() {
+
+					@Override
+					protected Void doInBackground(String... params) {
+						FeedManager feedManager = new FeedManager();
+						OAuthAuthenticatonMgr authMgr = new OAuthAuthenticatonMgr(
+								getApplicationContext());
+						if (!authMgr.isAuthenticationRequired()) {
+							feedManager.tweet(params[0],
+									authMgr.getAuthTokens());
+							
+						}
+						dialog.cancel();
+						return null;
+					}
+
+					/* (non-Javadoc)
+					 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+					 */
+					@Override
+					protected void onPostExecute(Void result) {
+						
+						super.onPostExecute(result);
+						refreshButton.performClick();
+					}
+					
+
+				};
+				asyncTask.execute(tweetText.getText().toString());
+
+			}
+		});
+		cancelButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				dialog.cancel();
+
+			}
+		});
+
+		dialog.show();
+	}
+
+	private void handleSettings() {
+		final Dialog dialog = new Dialog(this);
+		dialog.setTitle(R.string.settings);
+		dialog.setContentView(R.layout.settings);
+
+		Button applyButton = (Button) dialog.findViewById(R.id.apply_button);
+		Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+		final CheckBox removeAccountCheck = (CheckBox) dialog
+				.findViewById(R.id.remove_account_check);
+
+		applyButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (removeAccountCheck.isChecked()) {
+					resetAccount();
+				}
+				dialog.cancel();
+
+			}
+		});
+		cancelButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				dialog.cancel();
+
+			}
+		});
+
+		dialog.show();
+	}
+
+	private void resetAccount() {
+		authMgr.saveAuthTokens(null, null);
+		finish();
+		Intent navIntent = new Intent(getApplicationContext(),
+				SplashScreen.class);
+		startActivity(navIntent);
 	}
 }

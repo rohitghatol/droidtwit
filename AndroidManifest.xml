@@ -4,7 +4,7 @@
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name=".SplashScreen" android:label="@string/app_name"
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-			android:launchMode="singleTask">
+			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -16,11 +16,13 @@
 				<data android:scheme="ScribeTwit" android:host="twitt"></data>
 			</intent-filter>
 		</activity>
-		<activity android:name="SocialFeed" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
-		<activity android:name="DroidTwitSettings"></activity>
+		<activity android:name="SocialFeed"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+			android:screenOrientation="portrait"></activity>
+		<activity android:name="AboutUs"></activity>
 		<receiver android:name="AlarmReceiver" android:enabled="true">
 		</receiver>
-		<service android:name="com.social.services.SocialServiceImpl"/>
+		<service android:name="com.social.services.SocialServiceImpl" />
 	</application>
 
 	<uses-permission android:name="android.permission.INTERNET" />

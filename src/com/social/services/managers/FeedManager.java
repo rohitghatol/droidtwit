@@ -36,4 +36,10 @@ public class FeedManager {
 		return twits;
 		
 	}
+	
+	public void tweet(String tweet,OAuthTokens tokens){
+		OAuthSignpostClient client = new OAuthSignpostClient(OAuthAuthenticatonMgr.TWITTER_KEY,OAuthAuthenticatonMgr.TWITTER_SECRET,tokens.getAccessToken(),tokens.getAccessSecret()); 
+		Twitter twitter = new Twitter("saurabh",client);
+		twitter.setStatus(tweet);
+	}
 }
