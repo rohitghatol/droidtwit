@@ -20,7 +20,7 @@ public class DBAdapter
 	public static final String KEY_PROFILE_IMAGE_URL = "image";
 	public static final String KEY_TWIT_MESSAGE = "twitmessage";
 	
-	private static final String DATABASE_NAME = "scribetwitter";
+	private static final String DATABASE_NAME = "droidtwit";
 	private static final String DATABASE_TABLE = "twits";
 	
 	private static final int DATABASE_VERSION = 1;

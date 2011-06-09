@@ -15,15 +15,11 @@ import android.content.SharedPreferences.Editor;
  */
 public class OAuthAuthenticatonMgr {
 	private static final int TWITTER = 1;
-	private static final String TWIT_FEED = "twitFeed";
-	private static final String PROFILE_LIST = "profileList";
 	private static final String AUTHORIZATIONS = "OAuthAccessTokens";
 	private static final String ACCESS_TOKEN = "AccessToken";
 	private static final String TOKEN_SECRET = "TokenSecret";
 	public static final String TWITTER_KEY = "QFgKeMtBipewO4IG0rCNvw";
 	public static final String TWITTER_SECRET = "OLUqNsO5oSRrv8MgjAHZ0zgHx60tHzfQ7P3dbzzZPoI";
-	private static final String CALLBACK_URL = "ScribeTwit://twitt";
-	private static final String ACCOUNT_REMOVED = "Deauthorized";
 
 	private Context context = null;
 	

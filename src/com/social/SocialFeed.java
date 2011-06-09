@@ -313,6 +313,7 @@ public class SocialFeed extends ListActivity {
 
 					@Override
 					protected Void doInBackground(String... params) {
+						dialog.cancel();
 						FeedManager feedManager = new FeedManager();
 						OAuthAuthenticatonMgr authMgr = new OAuthAuthenticatonMgr(
 								getApplicationContext());
@@ -321,7 +322,7 @@ public class SocialFeed extends ListActivity {
 									authMgr.getAuthTokens());
 							
 						}
-						dialog.cancel();
+						
 						return null;
 					}
 

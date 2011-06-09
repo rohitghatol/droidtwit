@@ -22,7 +22,7 @@ public class SplashScreen extends Activity {
 	private static final int TWITTER = 1;
 	private static final String TWITTER_KEY = "QFgKeMtBipewO4IG0rCNvw";
 	private static final String TWITTER_SECRET = "OLUqNsO5oSRrv8MgjAHZ0zgHx60tHzfQ7P3dbzzZPoI";
-	private static final String CALLBACK_URL = "ScribeTwit://twitt";
+	private static final String CALLBACK_URL = "DroidTwit://twitt";
 	
 
 	private OAuthSignpostClient client;
@@ -41,17 +41,7 @@ public class SplashScreen extends Activity {
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 100,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (5000), 60000,pendingIntent);
-		
-//		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-//				System.currentTimeMillis(), (5 * 1000), pendingIntent);
-//		
-		System.out.println("Set Repearting alarm");
-
+		setAlarm();
 		setContentView(R.layout.main);
 		authMgr = new OAuthAuthenticatonMgr(getApplicationContext());
 		twitterButton = (ImageButton) findViewById(R.id.twitter);
@@ -65,9 +55,17 @@ public class SplashScreen extends Activity {
 		}
 	}
 
+	private void setAlarm(){
+		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 100,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (5000), 60000,pendingIntent);
+
+	}
 	protected void onResume() {
 		super.onResume();
-		Log.e("ScribeTwit", "ON RESUME");
+		Log.d("DroidTwit", "ON RESUME");
 	}
 
 	/*
@@ -78,7 +76,7 @@ public class SplashScreen extends Activity {
 
 	protected void onPause() {
 		super.onPause();
-		Log.e("ScribeTwit", "ON PAUSE");
+		Log.d("DroidTwit", "ON PAUSE");
 	}
 
 	/*
@@ -89,7 +87,7 @@ public class SplashScreen extends Activity {
 
 	protected void onStart() {
 		super.onStart();
-		Log.e("ScribeTwit", "ON START");
+		Log.d("DroidTwit", "ON START");
 	}
 
 	/*
@@ -100,7 +98,7 @@ public class SplashScreen extends Activity {
 
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.e("ScribeTwit", "ON DESTROY");
+		Log.e("DroidTwit", "ON DESTROY");
 	}
 
 	/*
@@ -111,7 +109,7 @@ public class SplashScreen extends Activity {
 
 	protected void onStop() {
 		super.onStop();
-		Log.e("ScribeTwit", "ON STOP");
+		Log.e("DroidTwit", "ON STOP");
 	}
 
 	/**
@@ -132,7 +130,7 @@ public class SplashScreen extends Activity {
 							.parse(authUrl)));
 
 				} catch (final Exception e) {
-					Log.d("ScribeTwit",
+					Log.d("DroidTwit",
 							"Caught exception in createAuthorizationRequests "
 									+ e.getMessage());
 				}
