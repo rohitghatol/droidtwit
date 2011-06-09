@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Add your social accounts !</string>
+    <string name="app_name">ScribeTwit</string>
+<string name="twitter">Twitter</string>
+<string name="facebook">Facebook</string>
+<string name="buzz">Buzz</string>
+<string name="removeAccount">Remove Account</string>
+<string name="refresh">Refresh</string>
+</resources>
