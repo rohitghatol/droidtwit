@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.social.adapters.TwitAdapter;
@@ -31,6 +33,7 @@ public class SocialFeed extends ListActivity {
 	private ProgressDialog dialog = null;
 	private OAuthAuthenticatonMgr authMgr;
 	private ISocialService socialService = null;
+	private ImageButton refreshButton = null;
 
 	private class TwitServiceConnection implements ServiceConnection {
 		// Called when the connection with the service is established
@@ -54,12 +57,12 @@ public class SocialFeed extends ListActivity {
 
 				@Override
 				protected List<Twit> doInBackground(OAuthTokens... params) {
-					List<Twit> result =null;
+					List<Twit> result = null;
 					if (null != socialService) {
 						try {
-							result =  socialService.getSocialFeed();
-							//Nothing found in database so do a force fetch
-							if(null==result || result.size()==0){
+							result = socialService.getSocialFeed();
+							// Nothing found in database so do a force fetch
+							if (null == result || result.size() == 0) {
 								result = socialService.getCurrentSocialFeed();
 							}
 						} catch (RemoteException e) {
@@ -85,7 +88,7 @@ public class SocialFeed extends ListActivity {
 						TwitAdapter adapter = new TwitAdapter(
 								getApplicationContext(), result);
 						setListAdapter(adapter);
-						
+
 					}
 					if (dialog.isShowing()) {
 						dialog.dismiss();
@@ -109,6 +112,7 @@ public class SocialFeed extends ListActivity {
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.feed_list);
+		this.refreshButton = (ImageButton) findViewById(R.id.force_refresh);
 		this.dialog = new ProgressDialog(this);
 
 		authMgr = new OAuthAuthenticatonMgr(getApplicationContext());
@@ -121,6 +125,76 @@ public class SocialFeed extends ListActivity {
 					Context.BIND_AUTO_CREATE);
 
 		}
+		this.refreshButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (null != socialService) {
+					AsyncTask<OAuthTokens, Void, List<Twit>> async = new AsyncTask<OAuthTokens, Void, List<Twit>>() {
+
+						/*
+						 * (non-Javadoc)
+						 * 
+						 * @see android.os.AsyncTask#onPreExecute()
+						 */
+						@Override
+						protected void onPreExecute() {
+							super.onPreExecute();
+
+							dialog.setMessage("Refreshing twits...");
+							dialog.show();
+
+						}
+
+						@Override
+						protected List<Twit> doInBackground(
+								OAuthTokens... params) {
+							List<Twit> result = null;
+							if (null != socialService) {
+								try {
+									result = socialService
+											.getCurrentSocialFeed();
+
+								} catch (RemoteException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+
+							return result;
+
+						}
+
+						/*
+						 * (non-Javadoc)
+						 * 
+						 * @see
+						 * android.os.AsyncTask#onPostExecute(java.lang.Object)
+						 */
+						@Override
+						protected void onPostExecute(List<Twit> result) {
+
+							super.onPostExecute(result);
+							if (null != result) {
+								TwitAdapter adapter = new TwitAdapter(
+										getApplicationContext(), result);
+								setListAdapter(adapter);
+
+							}
+							if (dialog.isShowing()) {
+								dialog.dismiss();
+							}
+						}
+
+					};
+					OAuthAuthenticatonMgr authMgr = new OAuthAuthenticatonMgr(
+							getApplicationContext());
+					OAuthTokens oAuthTokens = authMgr.getAuthTokens();
+					async.execute(oAuthTokens);
+				}
+
+			}
+		});
 	}
 
 	/*

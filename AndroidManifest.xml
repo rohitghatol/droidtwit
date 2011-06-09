@@ -16,10 +16,7 @@
 				<data android:scheme="ScribeTwit" android:host="twitt"></data>
 			</intent-filter>
 		</activity>
-		<activity android:name=".ScribeTwit" android:label="@string/app_name"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-			android:launchMode="singleTask"></activity>
-		<activity android:name="SocialFeed"></activity>
+		<activity android:name="SocialFeed" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 		<receiver android:name="AlarmReceiver" android:enabled="true">
 		</receiver>
 		<service android:name="com.social.services.SocialServiceImpl"/>

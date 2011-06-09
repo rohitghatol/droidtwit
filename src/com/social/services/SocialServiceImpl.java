@@ -114,7 +114,9 @@ public class SocialServiceImpl extends Service {
 	@Override
 	public void onStart(final Intent intent, final int startid) {
 		Log.d(TAG, "onStart");
-		if (intent.getExtras().containsKey("ACTION")
+
+		if (null != intent
+				&& intent.getExtras().containsKey("ACTION")
 				&& "UPDATE_FEEDS"
 						.equals(intent.getExtras().getString("ACTION"))) {
 			try {
@@ -130,36 +132,48 @@ public class SocialServiceImpl extends Service {
 	// FIXME - Need more optimum logic, but this will do for the demo
 	private void updateFeeds() throws RemoteException {
 		System.out.println("updateFeed called at " + (new Date()));
-		boolean sendNotification = false;
-		FeedManager feedManager = new FeedManager();
-		OAuthAuthenticatonMgr authMgr = new OAuthAuthenticatonMgr(
-				getApplicationContext());
-		if (!authMgr.isAuthenticationRequired()) {
-			List<Twit> twits = feedManager.getSocialFeed(authMgr
-					.getAuthTokens());
-			DBAdapter dbAdapter = new DBAdapter(getApplicationContext());
-			dbAdapter.open();
-			for (Twit twit : twits) {
-				long noOfRowsEffected = dbAdapter.updateTwit(twit.getTwitId(),
-						twit.getProfileName(), twit.getImageUrl(),
-						twit.getTwitMessage());
-				// Check for new twit
-				if (noOfRowsEffected < 1) {
-					// Insert and mark for notification
-					dbAdapter.insertTwit(twit.getTwitId(),
-							twit.getProfileName(), twit.getImageUrl(),
-							twit.getTwitMessage());
-					// Notify so that user comes to know about this
-					sendNotification = true;
+		Runnable runnable = new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+
+				boolean sendNotification = false;
+				FeedManager feedManager = new FeedManager();
+				OAuthAuthenticatonMgr authMgr = new OAuthAuthenticatonMgr(
+						getApplicationContext());
+				if (!authMgr.isAuthenticationRequired()) {
+					List<Twit> twits = feedManager.getSocialFeed(authMgr
+							.getAuthTokens());
+					DBAdapter dbAdapter = new DBAdapter(getApplicationContext());
+					dbAdapter.open();
+					for (Twit twit : twits) {
+						long noOfRowsEffected = dbAdapter.updateTwit(
+								twit.getTwitId(), twit.getProfileName(),
+								twit.getImageUrl(), twit.getTwitMessage());
+						// Check for new twit
+						if (noOfRowsEffected < 1) {
+							// Insert and mark for notification
+							dbAdapter.insertTwit(twit.getTwitId(),
+									twit.getProfileName(), twit.getImageUrl(),
+									twit.getTwitMessage());
+							// Notify so that user comes to know about this
+							sendNotification = true;
+						}
+
+					}
+					if (sendNotification) {
+						sendNotification();
+					}
+
+					dbAdapter.close();
 				}
 
 			}
-			if (sendNotification) {
-				sendNotification();
-			}
 
-			dbAdapter.close();
-		}
+		};
+		Thread thread = new Thread(runnable);
+		thread.start();
 
 	}
 

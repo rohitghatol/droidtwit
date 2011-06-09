@@ -18,10 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.social.R;
 import com.social.model.Twit;
+import com.social.services.managers.DrawableManager;
 
 /**
  * @author (sg)
@@ -31,7 +33,7 @@ public class TwitAdapter extends BaseAdapter
 {
 	private List<Twit> socialFeed;
 	private Context context;
-
+	private DrawableManager drawableManager = new DrawableManager();
 
 	/**
 	 * @param context
@@ -61,6 +63,10 @@ public class TwitAdapter extends BaseAdapter
 		}
 
 		Twit twit = (Twit) getItem(position);
+		
+		final ImageView profileImage = (ImageView) row.findViewById(R.id.profileImage);
+		drawableManager.fetchDrawableOnThread(twit.getImageUrl(), profileImage);
+		
 		final TextView profileName = (TextView)row.findViewById(R.id.profileName);
 		profileName.setText(twit.getProfileName());
 
