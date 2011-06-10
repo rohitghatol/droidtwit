@@ -140,10 +140,12 @@ public class SocialServiceImpl extends Service
 	}
 
 
+	/* (non-Javadoc)
+	 * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
+	 */
 	@Override
-	public void onStart(final Intent intent, final int startid)
-	{
-		Log.d(TAG, "onStart");
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.d(TAG, "onStartCommand");
 
 		if ( (null != intent) && intent.getExtras().containsKey("ACTION")
 				&& "UPDATE_FEEDS".equals(intent.getExtras().getString("ACTION")) )
@@ -158,7 +160,7 @@ public class SocialServiceImpl extends Service
 				e.printStackTrace();
 			}
 		}
-
+		return START_STICKY;
 	}
 
 
