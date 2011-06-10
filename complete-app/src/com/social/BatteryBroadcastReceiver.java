@@ -16,6 +16,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.social.services.managers.FeedManager;
 
@@ -33,11 +34,11 @@ public class BatteryBroadcastReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(final Context context, final Intent intent)
 	{
-		System.out.println("Battery level receieved");
+		
 		final int level = intent.getIntExtra("level", 0);
 		if ( level < 20 )
 		{
-			System.out.println("Battery level too low");
+			Log.d(BatteryBroadcastReceiver.class.getSimpleName(),"Battery level too low, suspending alarm manager");
 			final AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 			final Intent alarmIntent = new Intent(context, AlarmReceiver.class);
 			final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, alarmIntent,
@@ -46,6 +47,7 @@ public class BatteryBroadcastReceiver extends BroadcastReceiver
 		}
 		else
 		{
+			Log.d(BatteryBroadcastReceiver.class.getSimpleName(),"Battery level back to normal, starting alarm manager");
 			setAlarm(context);
 		}
 

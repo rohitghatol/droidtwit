@@ -39,8 +39,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(final Context context, Intent intent) {
-		System.out.println("Got Broadcast message "+(new Date()));
-		
 		Runnable runnable = new Runnable(){
 
 			public void run() {

@@ -167,7 +167,7 @@ public class SocialServiceImpl extends Service
 	// FIXME - Need more optimum logic, but this will do for the demo
 	private void updateFeeds() throws RemoteException
 	{
-		System.out.println("updateFeed called at " + (new Date()));
+		Log.d(SocialServiceImpl.class.getSimpleName(),"updateFeed() called at " + (new Date()));
 		final Runnable runnable = new Runnable() {
 
 			@Override
@@ -229,7 +229,7 @@ public class SocialServiceImpl extends Service
 		final CharSequence contentTitle = "New Twits";
 		final CharSequence contentText = "You have new twits!";
 		final Intent notificationIntent = new Intent(getApplicationContext(), SocialFeed.class);
-
+		notificationIntent.putExtra("Refresh", true);
 		final PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
 
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);

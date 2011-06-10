@@ -30,8 +30,7 @@ import android.widget.ImageButton;
 import com.social.services.managers.FeedManager;
 import com.social.services.managers.OAuthAuthenticatonMgr;
 
-public class SplashScreen extends Activity
-{
+public class SplashScreen extends Activity {
 
 	private static final int TWITTER = 1;
 	private static final String TWITTER_KEY = "QFgKeMtBipewO4IG0rCNvw";
@@ -45,112 +44,103 @@ public class SplashScreen extends Activity
 	private String verifier;
 	private String[] accessTokenAndSecret;
 
-
 	/**
-	 * Called when the activity is first created. Here we will setup oAuth related implementations.
+	 * Called when the activity is first created. Here we will setup oAuth
+	 * related implementations.
 	 * 
 	 * */
 
 	@Override
-	public void onCreate(final Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
+	public void onCreate(final Bundle savedInstanceState) {
+		try {
+			super.onCreate(savedInstanceState);
 
-		setAlarm();
-		setContentView(R.layout.main);
-		authMgr = new OAuthAuthenticatonMgr(getApplicationContext());
-		twitterButton = (ImageButton)findViewById(R.id.twitter);
+			setAlarm();
+			setContentView(R.layout.main);
+			authMgr = new OAuthAuthenticatonMgr(getApplicationContext());
+			twitterButton = (ImageButton) findViewById(R.id.twitter);
 
-		if ( authMgr.isAuthenticationRequired() )
-		{
-			twitterButton.setVisibility(View.VISIBLE);
-			createAuthorizationRequests(twitterButton);
-		}
-		else
-		{
-			twitterButton.setVisibility(View.INVISIBLE);
-			navigateToSocialFeed();
+			if (authMgr.isAuthenticationRequired()) {
+				twitterButton.setVisibility(View.VISIBLE);
+				createAuthorizationRequests(twitterButton);
+			} else {
+				twitterButton.setVisibility(View.INVISIBLE);
+				navigateToSocialFeed();
+			}
+		} catch (Exception ex) {
+			//To ensure application does not crash
+			Log.e(SplashScreen.class.getSimpleName(),"Caught exception in SplashScreen.onCreate() "+ex.getMessage());
 		}
 	}
-
 
 	/**
 	 * Set alarm manager for auto-refreshing twits
 	 */
-	private void setAlarm()
-	{
-		final AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-		final Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-		final PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 100, intent,
-				PendingIntent.FLAG_UPDATE_CURRENT);
+	private void setAlarm() {
+		final AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		final Intent intent = new Intent(getApplicationContext(),
+				AlarmReceiver.class);
+		final PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+				100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		final FeedManager feedManager = new FeedManager(getApplicationContext());
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (5000), feedManager
-				.getTwitterFeedRefreshInterval(), pendingIntent);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+				System.currentTimeMillis() + (5000),
+				feedManager.getTwitterFeedRefreshInterval(), pendingIntent);
 
 	}
-
 
 	/**
 	 * Create authorization request and launch login url in the browser
 	 * 
 	 * @param button
 	 */
-	void createAuthorizationRequests(final ImageButton button)
-	{
+	void createAuthorizationRequests(final ImageButton button) {
 		// Set on click listener
 		button.setOnClickListener(new OnClickListener() {
 
-			public void onClick(final View view)
-			{
+			public void onClick(final View view) {
 				String authUrl = null;
-				try
-				{
+				try {
 					authUrl = getAuthorizationUrl(TWITTER);
 
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri
+							.parse(authUrl)));
 
-				}
-				catch ( final Exception e )
-				{
-					Log.d("DroidTwit", "Caught exception in createAuthorizationRequests " + e.getMessage());
+				} catch (final Exception e) {
+					Log.d("DroidTwit",
+							"Caught exception in createAuthorizationRequests "
+									+ e.getMessage());
 				}
 			}
 		});
 	}
 
-
 	/**
-	 * When we get callback from browser after authentication, get the twits and Launch ListActivity - SocialFeed to
-	 * display these twits
+	 * When we get callback from browser after authentication, get the twits and
+	 * Launch ListActivity - SocialFeed to display these twits
 	 */
 	@Override
-	protected void onNewIntent(final Intent intent)
-	{
+	protected void onNewIntent(final Intent intent) {
 		super.onNewIntent(intent);
-		try
-		{
+		try {
 			saveAccessToken(intent);
 			navigateToSocialFeed();
-		}
-		catch ( final Exception e )
-		{
+		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
-
 	/**
 	 * GO to List View to load twits
 	 */
-	private void navigateToSocialFeed()
-	{
-		final Intent navIntent = new Intent(getApplicationContext(), SocialFeed.class);
+	private void navigateToSocialFeed() {
+		final Intent navIntent = new Intent(getApplicationContext(),
+				SocialFeed.class);
 		finish();
 		startActivity(navIntent);
 	}
-
 
 	/**
 	 * Get authorization url according social service selected
@@ -159,11 +149,11 @@ public class SplashScreen extends Activity
 	 * @return
 	 * @throws Exception
 	 */
-	private String getAuthorizationUrl(final int socialId) throws Exception
-	{
+	private String getAuthorizationUrl(final int socialId) throws Exception {
 		String authUrl = null;
 
-		client = new OAuthSignpostClient(TWITTER_KEY, TWITTER_SECRET, CALLBACK_URL);
+		client = new OAuthSignpostClient(TWITTER_KEY, TWITTER_SECRET,
+				CALLBACK_URL);
 
 		final URI twitterUrl = client.authorizeUrl();
 		authUrl = twitterUrl.toString();
@@ -172,20 +162,17 @@ public class SplashScreen extends Activity
 		return authUrl;
 	}
 
-
 	/**
 	 * Get access token from verifier received in callback URL
 	 * 
 	 * @param intent
 	 * @throws Exception
 	 */
-	private void saveAccessToken(final Intent intent) throws Exception
-	{
+	private void saveAccessToken(final Intent intent) throws Exception {
 
 		Log.e("OnResume", "Fetching access token ...");
 		final Uri uri = intent.getData();
-		if ( (uri != null) && uri.toString().startsWith(CALLBACK_URL) )
-		{
+		if ((uri != null) && uri.toString().startsWith(CALLBACK_URL)) {
 			verifier = uri.getQueryParameter("oauth_verifier");
 			Log.e("OnResume", verifier);
 
@@ -196,67 +183,62 @@ public class SplashScreen extends Activity
 			Log.e("NewIntent", "Access token: " + accessTokenAndSecret[0]);
 			Log.e("NewIntent", "Token secret: " + accessTokenAndSecret[1]);
 
-			authMgr.saveAuthTokens(accessTokenAndSecret[0], accessTokenAndSecret[1]);
+			authMgr.saveAuthTokens(accessTokenAndSecret[0],
+					accessTokenAndSecret[1]);
 		}
 
 	}
 
-
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
 		Log.d("DroidTwit", "ON RESUME");
 	}
 
-
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onPause()
 	 */
 
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		super.onPause();
 		Log.d("DroidTwit", "ON PAUSE");
 	}
 
-
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onStart()
 	 */
 
 	@Override
-	protected void onStart()
-	{
+	protected void onStart() {
 		super.onStart();
 		Log.d("DroidTwit", "ON START");
 	}
 
-
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onDestroy()
 	 */
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		super.onDestroy();
 		Log.e("DroidTwit", "ON DESTROY");
 	}
 
-
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onStop()
 	 */
 
 	@Override
-	protected void onStop()
-	{
+	protected void onStop() {
 		super.onStop();
 		Log.e("DroidTwit", "ON STOP");
 	}
