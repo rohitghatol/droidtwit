@@ -16,18 +16,15 @@ package com.tutorial.listactivity.adapter;
 
 import java.util.List;
 
-import com.tutorial.listactivity.R;
-import com.tutorial.listactivity.R.id;
-import com.tutorial.listactivity.R.layout;
-import com.tutorial.listactivity.model.Twit;
-
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.tutorial.listactivity.R;
+import com.tutorial.listactivity.model.Twit;
 
 /**
  * @author (sg)

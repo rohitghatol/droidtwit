@@ -35,35 +35,47 @@ public class SimpleBindServiceExample extends Activity {
 
 	private ICalcService calcService;
 
+	private ServiceConnection connection = new ServiceConnection() {
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			Toast.makeText(getApplicationContext(), "Service Disconnected",
+					Toast.LENGTH_SHORT).show();
+
+			calcService = null;
+
+		}
+
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			Toast.makeText(getApplicationContext(), "Service Bind successful",
+					Toast.LENGTH_SHORT).show();
+			calcService = ICalcService.Stub.asInterface(service);
+			registerUIEventHandlers();
+		}
+	};
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.simple_service);
 
-		final ServiceConnection connection = new ServiceConnection() {
-
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
-				Toast.makeText(getApplicationContext(), "Service Disconnected",
-						Toast.LENGTH_SHORT).show();
-
-				calcService = null;
-
-			}
-
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder service) {
-				Toast.makeText(getApplicationContext(), "Service Bind successful",
-						Toast.LENGTH_SHORT).show();
-				calcService = ICalcService.Stub.asInterface(service);
-				registerUIEventHandlers();
-			}
-		};
+		
+		
 		Intent serviceIntent = new Intent(getApplicationContext(),SimpleBindService.class);
 		boolean result = bindService(serviceIntent, connection,Context.BIND_AUTO_CREATE);
 		Log.d(SimpleBindServiceExample.class.getSimpleName(),"Service bind result = "+result);
 
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unbindService(connection);	
 	}
 
 	private void registerUIEventHandlers() {

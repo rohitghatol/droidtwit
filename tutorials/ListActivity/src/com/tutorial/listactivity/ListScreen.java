@@ -24,7 +24,7 @@ import com.tutorial.listactivity.adapter.TwitAdapter;
 import com.tutorial.listactivity.manager.FeedManager;
 import com.tutorial.listactivity.model.Twit;
 
-public class ListScreen extends ListActivity {
+public class ListScreen extends ListActivity { 
 	
 	private FeedManager mgr;
 	/** Called when the activity is first created. */

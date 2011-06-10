@@ -35,7 +35,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, Intent intent) {
 		Log.d(AlarmReceiver.class.getSimpleName(),"Got Broadcast message "+(new Date()));
-		
+		//In life cycle method run everything in thread to avoid ANR
 		Runnable runnable = new Runnable(){
 
 			public void run() {
@@ -55,23 +55,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 	{
 		final String ns = Context.NOTIFICATION_SERVICE;
 		final NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(ns);
-		final int icon = R.drawable.icon;
-		final CharSequence tickerText = "Notification";
-		final long when = System.currentTimeMillis();
-
-		final Notification notification = new Notification(icon, tickerText, when);
-
-
-		final CharSequence contentTitle = "New Notification";
-		final CharSequence contentText = "You have new Notification!";
-		final Intent notificationIntent = new Intent(context, AlarmManagerExample.class);
-
-		final PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-
-		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-
-		final int HELLO_ID = 1;
-
-		mNotificationManager.notify(HELLO_ID, notification);
+		final Notification notification = new Notification(R.drawable.icon, "Notification",  System.currentTimeMillis());
+		//Pending event to open our Application Screen when this notification is clicked
+		final PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, AlarmManagerExample.class), 0);
+		notification.setLatestEventInfo(context, "New Notification", "You have new Notification!", contentIntent);
+		mNotificationManager.notify(1, notification);
 	}
 }

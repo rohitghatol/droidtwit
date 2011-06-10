@@ -13,8 +13,6 @@
  */
 package com.tutorial.listactivity.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
 /**
  * @author rohit

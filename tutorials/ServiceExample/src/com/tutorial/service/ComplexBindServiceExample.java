@@ -36,32 +36,33 @@ import com.tutorial.service.services.bindcomplex.model.Twit;
 public class ComplexBindServiceExample extends Activity {
 
 	private IComplexService complexService;
+ 
+	private  ServiceConnection connection = new ServiceConnection() {
 
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			Toast.makeText(getApplicationContext(), "Service Disconnected",
+					Toast.LENGTH_SHORT).show();
+
+			complexService = null;
+
+		}
+
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			Toast.makeText(getApplicationContext(),
+					"Service Bind successful", Toast.LENGTH_SHORT).show();
+			complexService = IComplexService.Stub.asInterface(service);
+			registerUIEventHandlers();
+		}
+	};
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.complex_service);
 
-		final ServiceConnection connection = new ServiceConnection() {
-
-			@Override
-			public void onServiceDisconnected(ComponentName name) {
-				Toast.makeText(getApplicationContext(), "Service Disconnected",
-						Toast.LENGTH_SHORT).show();
-
-				complexService = null;
-
-			}
-
-			@Override
-			public void onServiceConnected(ComponentName name, IBinder service) {
-				Toast.makeText(getApplicationContext(),
-						"Service Bind successful", Toast.LENGTH_SHORT).show();
-				complexService = IComplexService.Stub.asInterface(service);
-				registerUIEventHandlers();
-			}
-		};
+		
 		Intent serviceIntent = new Intent(getApplicationContext(),
 				ComplexBindService.class);
 		boolean result = bindService(serviceIntent, connection,
@@ -69,6 +70,15 @@ public class ComplexBindServiceExample extends Activity {
 		Log.d(ComplexBindServiceExample.class.getSimpleName(),
 				"Service bind result = " + result);
 
+	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unbindService(connection);	
 	}
 
 	private void registerUIEventHandlers() {
