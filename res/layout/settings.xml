@@ -20,11 +20,8 @@
 				<TextView android:text="Select Refresh Interval"
 					android:id="@+id/textView1" android:layout_width="fill_parent"
 					android:layout_height="wrap_content"></TextView>
-				<Spinner android:id="@+id/refresh_rates"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:entries="@array/refresh_rates">
-
-				</Spinner>
+				<EditText android:id="@+id/refresh_rates"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="1"></EditText>
 			</TableRow>
 			<TableRow android:layout_width="fill_parent"
 				android:layout_height="wrap_content">
