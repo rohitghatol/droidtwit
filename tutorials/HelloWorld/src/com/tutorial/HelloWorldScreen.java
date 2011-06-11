@@ -45,6 +45,8 @@ public class HelloWorldScreen extends Activity {
 			}
 		});
     }
+    
+    
 
 
 	/* (non-Javadoc)

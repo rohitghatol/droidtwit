@@ -331,9 +331,10 @@ public class SocialFeed extends ListActivity {
 
 			@Override
 			public void onClick(final View v) {
+				dialog.cancel();
 				TweetAsyncTask tweetAsyncTask = new TweetAsyncTask();
 				tweetAsyncTask.execute(tweetText.getText().toString());
-
+				
 			}
 		});
 		cancelButton.setOnClickListener(new OnClickListener() {
@@ -471,8 +472,9 @@ public class SocialFeed extends ListActivity {
 		Log.d("SocialFeed", "ON START");
 	}
 
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onNewIntent(android.content.Intent)
 	 */
 	@Override
@@ -481,13 +483,15 @@ public class SocialFeed extends ListActivity {
 		super.onNewIntent(intent);
 		// If this Resume is happening because of clicking on Notification than
 		// refresh from database
-		
+
 		if (null != intent && null != intent.getExtras()
 				&& intent.getExtras().containsKey("Refresh")
 				&& intent.getExtras().getBoolean("Refresh")) {
-			Log.d("SocialFeed","***** Refresh as I am coming from notification");
-			//FIXME not action happens when refreshButton is clicked();
-			refreshButton.performClick();;
+			Log.d("SocialFeed",
+					"***** Refresh as I am coming from notification");
+			// FIXME not action happens when refreshButton is clicked();
+			refreshButton.performClick();
+			;
 		}
 
 		clearNotification();
@@ -505,7 +509,11 @@ public class SocialFeed extends ListActivity {
 		super.onDestroy();
 		Log.d("SocialFeed", "ON DESTROY");
 		// Other wise we will leak a connection
-		unbindService(connection);
+		try {
+			unbindService(connection);
+		} catch (Exception ex) {
+
+		}
 
 	}
 }

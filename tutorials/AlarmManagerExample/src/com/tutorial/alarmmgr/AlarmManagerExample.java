@@ -30,7 +30,8 @@ public class AlarmManagerExample extends Activity {
 		final PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 100, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (5000), 60000, pendingIntent);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (5000), 
+				60000, pendingIntent);
 
 	}
 	
