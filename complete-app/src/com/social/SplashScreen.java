@@ -55,6 +55,12 @@ public class SplashScreen extends Activity {
 		try {
 			super.onCreate(savedInstanceState);
 
+			//FIXME - This is not the right place to set the alarm. We should have a broad cast receiver which listens for Phone Boot Event.
+			// When the phone boots we should set the alarm manager.
+			//FIXME - In the same broadcast receiver we should register our broadcast receiver to listen to battery levels and register another 
+			// broadcast receiver there. That broadcast receiver will shut down or restart Alarm Manager depending on the battery condition.
+			// These changes will be coming soon.......
+
 			setAlarm();
 			setContentView(R.layout.main);
 			authMgr = new OAuthAuthenticatonMgr(getApplicationContext());
@@ -77,6 +83,12 @@ public class SplashScreen extends Activity {
 	 * Set alarm manager for auto-refreshing twits
 	 */
 	private void setAlarm() {
+		
+		//FIXME - This is not the right place to set the alarm. We should have a broad cast receiver which listens for Phone Boot Event.
+		// When the phone boots we should set the alarm manager.
+		//FIXME - In the same broadcast receiver we should register our broadcast receiver to listen to battery levels and register another 
+		// broadcast receiver there. That broadcast receiver will shut down or restart Alarm Manager depending on the battery condition.
+		// These changes will be coming soon.......
 		final AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		final Intent intent = new Intent(getApplicationContext(),
 				AlarmReceiver.class);
